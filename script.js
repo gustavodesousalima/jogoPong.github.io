@@ -104,7 +104,7 @@ const moverRebatedorTouch = (e) => {
 };
 
 // Adicione um ouvinte de evento para o toque na tela.
-jogo.addEventListener('touchstart', moverRebatedorTouch);
+jogo.addEventListener('touchmove', moverRebatedorTouch);
 
 // Função para verificar a colisão entre o disco e um rebatedor.
 const colisao = (disco, rebatedor) => {
