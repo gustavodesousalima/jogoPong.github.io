@@ -10,6 +10,9 @@ const ajustarTamanhoDoCanvas = () => {
     jogo.height = window.innerHeight;
 };
 
+// Variável para rastrear a posição vertical do toque na tela.
+let touchY = 0;
+
 // Inicializa o tamanho do canvas com base no tamanho da janela.
 ajustarTamanhoDoCanvas();
 
@@ -78,7 +81,7 @@ const disco = {
 };
 
 // Função para mover o rebatedor do usuário com base no movimento do mouse.
-const moverRebatedor = (e) => {
+const moverRebatedorMouse = (e) => {
     let area = jogo.getBoundingClientRect();
     let areaDoRebatedorY = e.clientY - area.top - usuario.r;
     let areaDoRebatedorX = e.clientX - area.left - usuario.r;
@@ -91,7 +94,17 @@ const moverRebatedor = (e) => {
 };
 
 // Adicionando um ouvinte de evento para o movimento do mouse.
-jogo.addEventListener('mousemove', moverRebatedor);
+jogo.addEventListener('mousemove', moverRebatedorMouse);
+
+// Função para mover o rebatedor com base no toque na tela.
+const moverRebatedorTouch = (e) => {
+    let area = jogo.getBoundingClientRect();
+    touchY = e.touches[0].clientY - area.top - usuario.r;
+    disco.parado = false;
+};
+
+// Adicione um ouvinte de evento para o toque na tela.
+jogo.addEventListener('touchstart', moverRebatedorTouch);
 
 // Função para verificar a colisão entre o disco e um rebatedor.
 const colisao = (disco, rebatedor) => {
@@ -133,7 +146,6 @@ const colisao = (disco, rebatedor) => {
 
     return false;
 };
-
 
 // Função para reiniciar a posição do disco.
 const reiniciarPosicaoDoDisco = () => {
@@ -246,3 +258,4 @@ setInterval(inicializarJogo, 1000 / 50);
 
 // Atualiza o tamanho do canvas quando a janela for redimensionada.
 window.addEventListener('resize', ajustarTamanhoDoCanvas);
+``
