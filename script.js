@@ -22,6 +22,13 @@ const desenharMesa = (x, y, w, h, cor) => {
     renderizacaoDeContexto.fillRect(x, y, w, h);
 };
 
+// Função para desenhar a borda da mesa.
+const desenharBorda = (w, cor) => {
+    renderizacaoDeContexto.lineWidth = w;
+    renderizacaoDeContexto.strokeStyle = cor;
+    renderizacaoDeContexto.strokeRect(0, 0, jogo.width, jogo.height);
+};
+
 // Função para desenhar um rebatedor.
 const desenharRebatedor = (x, y, radius, cor) => {
     renderizacaoDeContexto.fillStyle = cor;
@@ -62,7 +69,7 @@ class Jogador {
         this.cor = cor;
         this.pontuacao = pontuacao;
     }
-}
+};
 
 // Criando os jogadores.
 const usuario = new Jogador(20, jogo.height / 2 - 50, 30, '	#0000CD', 0);
@@ -136,13 +143,13 @@ const colisao = (disco, rebatedor) => {
             disco.velocidadeX = disco.velocidade * Math.cos(bounceAngle);
         } else {
             disco.velocidadeX = -disco.velocidade * Math.cos(bounceAngle);
-        }
+        };
 
         // Inverter a direção Y do disco.
         disco.velocidadeY = -disco.velocidade * Math.sin(bounceAngle);
 
         return true;
-    }
+    };
 
     return false;
 };
@@ -162,11 +169,11 @@ const atualizar = () => {
     if (!disco.parado) {
         disco.x += disco.velocidadeX;
         disco.y += disco.velocidadeY;
-    }
+    };
     // Invertendo a velocidade vertical quando o disco atinge as bordas da tela.
     if (disco.y + disco.r > jogo.height || disco.y - disco.r < 0) {
         disco.velocidadeY = -disco.velocidadeY;
-    }
+    };
 
     let lvl = 10;
     // Função para ajustar o movimento do jogador computador de acordo com a posição do disco.
@@ -178,14 +185,14 @@ const atualizar = () => {
             computador.y -= lvl;
         } else if (centroDisco > centroJogadorComputador + 20) {
             computador.y += lvl;
-        }
+        };
 
         // Limitando o movimento vertical do jogador computador.
         if (computador.y < 0) {
             computador.y = 0;
         } else if (computador.y > jogo.height) {
             computador.y = jogo.height;
-        }
+        };
     };
 
     // Chamando a função para ajustar o movimento do jogador computador.
@@ -209,7 +216,7 @@ const atualizar = () => {
         disco.velocidadeY = disco.velocidade * Math.sin(anguloDeSalto);
 
         disco.velocidade += 0.5;
-    }
+    };
 
     // Verificando se o disco ultrapassou as bordas da tela e atualizando a pontuação.
     if (disco.x > jogo.width) {
@@ -218,7 +225,7 @@ const atualizar = () => {
     } else if (disco.x < 0) {
         computador.pontuacao++;
         reiniciarPosicaoDoDisco();
-    }
+    };
 };
 
 // Função para verificar o vencedor e exibir o texto correspondente.
@@ -227,13 +234,20 @@ const verificarVencedor = (pontosUsuario, pontosComputador) => {
         desenharTexto('VOCÊ VENCEU!', jogo.width / 2, 100, '#008000');
     } else if (pontosComputador >= 5) {
         desenharTexto('GAME OVER!', jogo.width / 2, 100, '#00FF00');
-    }
+    };
 };
 
 // Função para renderizar o jogo.
 const renderizarJogo = () => {
     desenharMesa(0, 0, jogo.width, jogo.height, '#000000');
     desenharLinhaHorizontal(jogo.width / 2, 0, 2, jogo.height, '#fff');
+
+    if (disco.y + disco.r > jogo.height || disco.y - disco.r < 0) {
+        desenharBorda(10, 'red');
+    } else {
+        // Restaurando a cor padrão do disco
+        desenharBorda(10, 'green');
+    };
 
     desenharRebatedor(usuario.x, usuario.y, usuario.r, usuario.cor);
     desenharRebatedor(computador.x, computador.y, computador.r, computador.cor);
@@ -258,4 +272,3 @@ setInterval(inicializarJogo, 1000 / 50);
 
 // Atualiza o tamanho do canvas quando a janela for redimensionada.
 window.addEventListener('resize', ajustarTamanhoDoCanvas);
-``
